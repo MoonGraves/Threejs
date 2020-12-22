@@ -1,8 +1,8 @@
 # Threejs
 
-JavaScript libraries like vue.js , angular.js and ect.
+JavaScript kirjasto kuin vue.js , angular.js ja ect.
 
-Threejs is kind graphics as 2D and 3D modeling, where can control cameras, shadows, rendering of material like almost reality without 3D modeling software.
-Of course there might be can put finished 3D model files to show in html websites, but file type need to be Obj. 
+tyyppillinen 2D ja 3D mallinta, missä voi kontrolloida kameroita, varjoja ja renderöidä materiaalin kuin realistisena ja ilman 3D mallinta via sovelluksia. 
+Tietenkin mallinnettuja 3D malleja voidaan tuoda webbisivustoon, mutta niiden tiedosto tulee olemaan mm. obj, fbx ja jne.
 
-In threejs just need html, css and javascript libraries, with threejs can be make many different WebGl software for using by web browsers. 
+Threejs tarvitaan nämä työkalut html, css ja javascript kirjastot, threejs:n kanssa tulee olemaan erilaisia WebGl sovelluksia näissä webbi selaimella.
