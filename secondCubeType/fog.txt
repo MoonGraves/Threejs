@@ -1,0 +1,6 @@
+if add fog will be inside script of javascript or just in js file
+
+first is fog color and add it show up of same color, 0.0015 is fog strength how much will be show up, default number is around 0.001 to 0.01 of these between
+
+scene.background = new THREE.Color( 0xEAB25D );
+scene.fog = new THREE.FogExp2( 0xEAB25D, 0.0015 );
