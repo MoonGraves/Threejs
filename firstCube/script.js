@@ -1,12 +1,11 @@
 			function init() {
 
 				camera = new THREE.PerspectiveCamera( 70, window.innerWidth / window.innerHeight, 1, 1000 );
-				camera.position.z = 500;
+				camera.position.z = 400;
 
 				scene = new THREE.Scene();
 
-				//var texture = new THREE.TextureLoader().load( 'crate.gif' );
-        var texture = new THREE.TextureLoader().load( 'WoodPlant.jpg' );
+				var texture = new THREE.TextureLoader().load( 'crate.gif' );
 
 				var geometry = new THREE.BoxBufferGeometry( 200, 200, 200 );
 				var material = new THREE.MeshBasicMaterial( { map: texture } );
@@ -19,11 +18,9 @@
 				renderer.setSize( window.innerWidth, window.innerHeight );
 				document.body.appendChild( renderer.domElement );
 
-				//
 
 				window.addEventListener( 'resize', onWindowResize, false );
-        
-        
+
 			}
 
 			function onWindowResize() {
@@ -41,6 +38,7 @@
 
 				mesh.rotation.x += 0.005;
 				mesh.rotation.y += 0.01;
+        mesh.rotation.z += 0.025
 
 				renderer.render( scene, camera );
 
