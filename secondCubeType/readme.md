@@ -7,3 +7,6 @@ these index.html is made by separately for example land is one item and multi bo
 
 Empty land preview: https://threejsland.zhaotan18x.repl.co/
 This is with orbitcontrol where can move by mouse and scroll the scene view
+
+Multi box preview:https://threejsmultibox.zhaotan18x.repl.co/
+Same as empty land added Orbitcontrols, but in here added axes helper and light target with helper
