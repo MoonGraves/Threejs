@@ -1,0 +1,11 @@
+axesHelper is typical like in math or physics the cartesian coordinate system, where goes x y and z axels
+
+this is very helpful tool, because of creating or adding some geometry material like box, cube, circle or donuts materials of the scene,
+you will be known of material size where it does going 
+
+it'll be added in scription of javascript or in js file with others materials
+
+add the coordinates and will show up, the number means of the size, its default number is 1
+
+var axesHelper = new THREE.AxesHelper( 500 );
+scene.add( axesHelper );
