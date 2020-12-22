@@ -6,3 +6,4 @@ Coordinates is like xyz axels where go these lines and ect.
 these index.html is made by separately for example land is one item and multi box and with fog and ect.
 
 Empty land preview: https://threejsland.zhaotan18x.repl.co/
+This is with orbitcontrol where can move by mouse and scroll the scene view
