@@ -78,7 +78,7 @@ function init() {
         //Background
 				renderer.setClearColor("grey"); //taustavärin muokkaus
 
-				controls = new THREE.OrbitControls(camera, renderer.domElement);
+				controls = new THREE.OrbitControls(camera, renderer.domElement); //Need Orbitcontrols js or just link for and update...
 				window.addEventListener( 'resize', onWindowResize, false );
 
 			}
@@ -101,6 +101,7 @@ function init() {
 				//boxi1.rotation.y += 0.01;
         //boxi1.rotation.z += 0.03;
 
+				//Orbitcontrols js or just link for the update...
 				controls.update();
 				renderer.render( scene, camera );
 
