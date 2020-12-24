@@ -1,0 +1,245 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width">
+    <title>repl.it</title>
+    <link href="style.css" rel="stylesheet" type="text/css" />
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/97/three.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/103/three.js"></script>
+
+  <script src="http://stemkoski.github.io/Three.js/js/OrbitControls.js"></script>
+
+  <script src="http://threejs.org/examples/js/controls/OrbitControls.js"></script>
+
+  <script src="http://threejs.org/examples/js/WebGL.js"></script>
+
+  <script src="OrbitControls.js"></script>
+
+  <!--Stats -->
+  <script src="https://threejs.org/build/three.module.js"></script>
+  <script src="https://stemkoski.github.io/Three.js/js/Stats.js"></script>
+
+  </head>
+  <body>
+    <script src="script.js"></script>
+
+   <script>
+        var camera, scene, renderer;
+        var mesh;
+
+        var earthPivot, moonPivot, lavaPivot; // koska käytetään myös animate():ssa
+
+        var mouse = new THREE.Vector2();
+
+        function onMouseMove(event) {
+
+            // calculate mouse position in normalized device coordinates
+            // (-1 to +1) for both components
+
+            mouse.x = (event.clientX / window.innerWidth) * 2 - 1;
+            mouse.y = -(event.clientY / window.innerHeight) * 2 + 1;
+
+        }
+
+        init();
+        animate();
+
+        function init() {
+
+            camera = new THREE.PerspectiveCamera(100, window.innerWidth / window.innerHeight, 1, 100000);
+            camera.position.z = 1500,
+            camera.position.y = 1000;
+
+            scene = new THREE.Scene();
+
+            //renderer.shadowMapEnabled = true;
+            //renderer.shadowMapSoft = true;
+
+
+            var texture = new THREE.TextureLoader().load('8k_sun.jpg');
+            var maaTexture = new THREE.TextureLoader().load('land_ocean.jpg');
+            var kuuTexture = new THREE.TextureLoader().load('2k_fictional.jpg');
+            var lavaTexture = new THREE.TextureLoader().load('lava-type.jpg');
+
+            var geometrySun = new THREE.SphereBufferGeometry(300, 32, 32); //BoxBufferGeometry laattikko muotoinen
+            var geometryMaa = new THREE.SphereBufferGeometry(75, 32, 32);
+            var geometryKuu = new THREE.SphereBufferGeometry(50, 32, 32);
+            var geometryLava = new THREE.SphereBufferGeometry(65, 32, 32);
+            //lattia pitää olla boxbuffergeometri jos kyse on lattian pinnasta koska se on tasainen
+
+            var material = new THREE.MeshBasicMaterial({ map: texture });
+            var materialMaa = new THREE.MeshStandardMaterial({ map: maaTexture });
+            var materialKuu = new THREE.MeshStandardMaterial({ map: kuuTexture });
+            var materialLava = new THREE.MeshStandardMaterial({ map: kuuTexture });
+
+            //////////////////////////////////////////////////////////////////////////////////////////////
+
+            //ulkopuolinen pinta, eli taivas esim. josta kun scroll pois josta näkee ympäristön jonka on maapallo muotoinen & tai jopa musta-aukko (huono huumori)
+
+            var texture1 = new THREE.TextureLoader().load('2k_stars.jpg');
+            var geometry1 = new THREE.SphereBufferGeometry(2000, 50, 50);
+            var material1 = new THREE.MeshBasicMaterial({ map: texture1, side: THREE.DoubleSide }); //tai BackSide
+
+            mesh2 = new THREE.Mesh(geometry1, material1);
+            scene.add(mesh2);
+
+            ////////////////////////////////////////////////////////////////////////////////////////////
+
+            //tähden lisääminen
+            /*
+            var starsGeometry = new THREE.Geometry();
+
+            for (var i = 0; i < 10000; i++) {
+
+                var star = new THREE.Vector3();
+                star.x = THREE.Math.randFloatSpread(5000);
+                star.y = THREE.Math.randFloatSpread(5000);
+                star.z = THREE.Math.randFloatSpread(5000);
+
+                starsGeometry.vertices.push(star);
+
+            }
+
+            var starsMaterial = new THREE.PointsMaterial({ color: 0x888888 });
+
+            var starField = new THREE.Points(starsGeometry, starsMaterial);
+
+            //scene.add(starField);
+            */
+
+
+            
+
+            ////////////////////////////////////////////////////////////////////////////////////////////
+
+            //Pointlight joka antaa valoa 360 astetta, 0xfff väri, 2 valon tehokuus ja etäisyys jos on kaukana
+            var light = new THREE.PointLight(0xFFFFFF, 3, 2500 );
+            light.penumbra = 1;
+            light.distance = 20000;
+            light.position.set(0, 0 , 0);
+            light.shadow.camera.far = 5000;
+            light.shadow.camera.fov = 1000;
+
+            //light.shadow.camera.near = 1500;
+            light.shadow.mapSize.width = 750;
+            light.shadow.mapSize.height = 750;
+            light.shadow.camera.near = 0.1;
+
+            //light.shadow.camera = true;
+            light.castShadow = true;
+            scene.add.target = earthPivot;
+            geometrySun.target = earthPivot;
+
+            scene.add(light);
+            
+            //var ambientLight = new THREE.AmbientLight(0xffffff, 0.5);
+            //scene.add(ambientLight);
+
+            
+            ////////////////////////////////////////////////////////////////////////////////////////////
+
+            //maapallo
+            earthPivot = new THREE.Object3D(); // keskipiste
+            scene.add(earthPivot);        // vain isäkappale sceneen, ja muut lisätään isäkappaleeseen
+            earth = new THREE.Mesh(geometryMaa, materialMaa);
+            earth.position.x = 1200;       // alkuperäinen sijainti
+            earth.castShadow = true;
+            earth.receiveShadow = true;
+            earthPivot.add(earth);        // maa kiertää keskipistettä
+
+            //kuu
+            moonPivot = new THREE.Object3D();
+            earth.add(moonPivot);         // kuun radan keskipiste seuraa nyt earth:iä
+            var moon = new THREE.Mesh(geometryKuu, materialKuu);
+            moon.position.x = 300;        // sijainti suhteessa isäobjektiin(earth)
+            moon.castShadow = true;
+            moon.receiveShadow = true;
+
+            scene.add(moon);
+
+           ////////////////////////////////////////////////////////////////////////////////////////////
+            moonPivot.add(moon);
+
+            //laava
+            lavaPivot = new THREE.Object3D();
+            scene.add(lavaPivot)
+            lava = new THREE.Mesh(geometryLava, materialLava);
+            lava.position.x = -1200;
+            lava.castShadow = true;
+            lava.receiveShadow = true;
+            lavaPivot.add(lava);
+
+              
+            var targetObject = new THREE.Object3D();
+            scene.add(targetObject);
+
+
+            ////////////////////////////////////////////////
+
+            //AURINKO PLANET
+            mesh = new THREE.Mesh(geometrySun, material);
+            //mesh.castShadow = true;
+            mesh.position.set(0, 0, 0); //mesh.receiveShadow = true;
+            scene.add(mesh);
+
+            ////////////////////////////////////////////////
+            // STATS
+            stats = new Stats();
+            document.body.appendChild(stats.domElement);
+
+
+            /////////////////////////////////////////////
+
+            renderer = new THREE.WebGLRenderer({ antialias: true });
+            renderer.setClearColor("navy"); //taustaväri
+            renderer.shadowMap.enabled= true;
+            renderer.setPixelRatio(window.devicePixelRatio);
+            renderer.setSize(window.innerWidth, window.innerHeight);
+
+            //renderer.shadowMap.enabled = true;
+            //renderer.shadowMap.type = THREE.PCFSoftShadowMap;
+
+            document.body.appendChild(renderer.domElement);
+
+            controls = new THREE.OrbitControls(camera, renderer.domElement);
+            window.addEventListener('resize', onWindowResize, false);
+            window.addEventListener('mousemove', onMouseMove, false);
+
+
+        }
+
+        function onWindowResize() {
+
+            camera.aspect = window.innerWidth / window.innerHeight;
+            camera.updateProjectionMatrix();
+
+            renderer.setSize(window.innerWidth, window.innerHeight);
+
+        }
+
+        function animate() {
+
+            requestAnimationFrame(animate);
+
+
+            //maa ja kuu pyörimis nopeus
+            //earthPivot.rotation.y += 0.010;
+            moonPivot.rotation.z += 0.025;
+            lavaPivot.rotation.z += 0.025;
+            //moonPivot.rotation.x += 0.005;
+            earthPivot.rotation.y += 0.025;
+            mesh.rotation.y += 0.01; //aurinko pyöriminen
+
+            //mesh.rotation.x += 0.005;
+            //mesh.rotation.y += 0.01;
+            controls.update();
+            stats.update();
+            
+            renderer.render(scene, camera);
+
+        }
+    </script>
+
+</html>
