@@ -1,0 +1,27 @@
+Statsin tarvittaan, jopa ehkä pari tai yks script:itiä, joka saa tulla <head> sisään </head> tai <body> tänne <body>, ei ole väliä.
+Riittää, että tietää missä ne oikein sijoittuu
+  <!--Stats -->
+  <script src="https://threejs.org/build/three.module.js"></script>
+  <script src="https://stemkoski.github.io/Three.js/js/Stats.js"></script>
+  
+ - Jonka jälkeen lisäät sen elementtin funktion, useissa esimerkissä on esitetty
+ esim:: tämä on yleisin tapa, jossa nyt muinoin 2019 päivitetty versiossa, jossa on sijoitetu import ja jne. mistä näkee threejs mallien esimerkkeissä
+ 
+function init(): { sisälle pälä pälä -->
+ 
+stats = new Stats();
+container.appendChild( stats.dom ); 
+
+-Tämä on toinen tapa, perinteinen old school & jos kyseisen budjektin takia ja konen lataamista varten. 
+eli tarvittavat pari script:it tai yksi (vain http://steamkoski pälä pälä)
+
+alkuun tietenkin tarvit >>> var stats;
+sama kuin, functio init () : { sisälle pälä pälä -->> tämän 
+// STATS
+stats = new Stats();
+stats.domElement.style.position = 'absolute'; //'relative'
+document.body.appendChild(stats.domElement);
+
+-Ja viimeisenä lisäät funktion animate () { sisän pälä pälä tämän :: stats.update();
+joka päivittyy aina, ennen sitä (stats.domElement.style.position & absolute), joka tarkoitta että se kuin on siel käyttäjän luovan projektin scenen sisällä,
+ilman sitä se oisi kuin luonnut oman tällaisen pitkän rivin tyhjän aukkon kuin <br> tai <hr>, sama kuin lisäät (relative)
